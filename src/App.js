@@ -4,7 +4,7 @@ import "./App.css";
 export default function App() {
   const starterItems = [
     { id: "1", text: "Take out garbage", completed: false, editing: false },
-    { id: "2", text: "Do homework", completed: false, editing: false },
+    { id: "2", text: "Do homework", completed: false, editing: true },
     { id: "3", text: "Bake a cake", completed: true, editing: false },
     { id: "4", text: "Walk the dog", completed: false, editing: false },
   ];
@@ -55,14 +55,22 @@ function ToDoList({ items, onClickItem }) {
       <ul>
         {items
           .filter((item) => !item.completed)
-          .map((item) => (
-            <li onClick={onClickItem} key={item.id} id={item.id}>
-              {item.text}
-              <button data-identify={item.id}>Edit</button>
-              <button data-identify={item.id}>Copy</button>
-              <button data-identify={item.id}>Delete</button>
-            </li>
-          ))}
+          .map((item) =>
+            item.editing ? (
+              <li>
+                <input type="text" />
+                <button data-identify={item.id}>Overwrite</button>
+                <button data-identify={item.id}>Cancel</button>
+              </li>
+            ) : (
+              <li onClick={onClickItem} key={item.id} id={item.id}>
+                {item.text}
+                <button data-identify={item.id}>Edit</button>
+                <button data-identify={item.id}>Copy</button>
+                <button data-identify={item.id}>Delete</button>
+              </li>
+            )
+          )}
       </ul>
     </div>
   );
@@ -89,10 +97,9 @@ function DoneList({ items, onClickItem, onClearDone }) {
 function AddItemForm({ onAddNewItem }) {
   function handleFormSubmit(e) {
     e.preventDefault();
-    console.log("submit");
-    const todoInput = document.querySelector("#todo-input").value;
-    console.log(todoInput);
-    onAddNewItem(todoInput);
+    const todoInput = document.querySelector("#todo-input");
+    onAddNewItem(todoInput.value);
+    todoInput.value = "";
   }
 
   return (
