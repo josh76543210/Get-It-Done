@@ -11,6 +11,16 @@ export default function App() {
 
   const [items, setItems] = useState(starterItems);
 
+  function addNewItem(itemText) {
+    //generate random id
+    const uuid = crypto.randomUUID();
+
+    setItems([
+      ...items,
+      { id: uuid, text: itemText, completed: false, editing: false },
+    ]);
+  }
+
   function HandleItemClick(e) {
     // updated completed property of clicked item
     setItems((items) =>
@@ -34,7 +44,7 @@ export default function App() {
         onClickItem={HandleItemClick}
         onClearDone={HandleClearDone}
       />
-      <AddItemForm />
+      <AddItemForm onAddNewItem={addNewItem} />
     </div>
   );
 }
@@ -76,9 +86,17 @@ function DoneList({ items, onClickItem, onClearDone }) {
   );
 }
 
-function AddItemForm() {
+function AddItemForm({ onAddNewItem }) {
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    console.log("submit");
+    const todoInput = document.querySelector("#todo-input").value;
+    console.log(todoInput);
+    onAddNewItem(todoInput);
+  }
+
   return (
-    <form action="#">
+    <form action="#" onSubmit={handleFormSubmit}>
       <input type="text" name="todo-input" id="todo-input" />
       <button type="submit">Add item</button>
     </form>
