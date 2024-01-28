@@ -20,24 +20,33 @@ export default function App() {
     );
   }
 
+  function HandleClearDone() {
+    // delete items that are completed
+    setItems(items.filter((item) => !item.completed));
+  }
+
   return (
     <div className="App">
       <h1>Get It Done!</h1>
-      <ToDoList items={items} onClick={HandleItemClick} />
-      <DoneList items={items} onClick={HandleItemClick} />
+      <ToDoList items={items} onClickItem={HandleItemClick} />
+      <DoneList
+        items={items}
+        onClickItem={HandleItemClick}
+        onClearDone={HandleClearDone}
+      />
       <AddItemForm />
     </div>
   );
 }
 
-function ToDoList({ items, onClick }) {
+function ToDoList({ items, onClickItem }) {
   return (
     <div className="todo-list-container">
       <ul>
         {items
           .filter((item) => !item.completed)
           .map((item) => (
-            <li onClick={onClick} key={item.id} id={item.id}>
+            <li onClick={onClickItem} key={item.id} id={item.id}>
               {item.text}
               <button data-identify={item.id}>Edit</button>
               <button data-identify={item.id}>Copy</button>
@@ -49,7 +58,7 @@ function ToDoList({ items, onClick }) {
   );
 }
 
-function DoneList({ items, onClick }) {
+function DoneList({ items, onClickItem, onClearDone }) {
   return (
     <div className="done-list-container">
       <h2>Already done</h2>
@@ -57,12 +66,12 @@ function DoneList({ items, onClick }) {
         {items
           .filter((item) => item.completed)
           .map((item) => (
-            <li onClick={onClick} key={item.id} id={item.id}>
+            <li onClick={onClickItem} key={item.id} id={item.id}>
               {item.text}
             </li>
           ))}
       </ul>
-      <button>Clear already done</button>
+      <button onClick={onClearDone}>Clear already done</button>
     </div>
   );
 }
