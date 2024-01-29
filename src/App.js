@@ -4,7 +4,7 @@ import "./App.css";
 export default function App() {
   const starterItems = [
     { id: "1", text: "Take out garbage", completed: false, editing: false },
-    { id: "2", text: "Do homework", completed: false, editing: true },
+    { id: "2", text: "Do homework", completed: false, editing: false },
     { id: "3", text: "Bake a cake", completed: true, editing: false },
     { id: "4", text: "Walk the dog", completed: false, editing: false },
   ];
@@ -21,35 +21,106 @@ export default function App() {
     ]);
   }
 
-  function HandleItemClick(e) {
-    // updated completed property of clicked item
+  function handleItemClick(e) {
+    // update completed property of clicked item
     setItems((items) =>
       items.map((item) =>
-        item.id === e.target.id ? { ...item, completed: !item.completed } : item
+        item.id === e.target.parentNode.id
+          ? { ...item, completed: !item.completed }
+          : item
       )
     );
   }
 
-  function HandleClearDone() {
+  function handleClearDone() {
     // delete items that are completed
     setItems(items.filter((item) => !item.completed));
+  }
+
+  function handleEditItem(e) {
+    // update editing property of clicked item
+    setItems((items) =>
+      items.map((item) =>
+        item.id === e.target.dataset.identify
+          ? { ...item, editing: true }
+          : item
+      )
+    );
+  }
+
+  function handleCancelEdit(e) {
+    // update editing property of clicked item
+    setItems((items) =>
+      items.map((item) =>
+        item.id === e.target.dataset.identify
+          ? { ...item, editing: false }
+          : item
+      )
+    );
+  }
+
+  function handleOverwrite(e) {
+    // get new text property
+    const newText = e.target.parentNode.querySelector("input").value;
+    // update editing and text property of clicked item
+    setItems((items) =>
+      items.map((item) =>
+        item.id === e.target.dataset.identify
+          ? { ...item, text: newText, editing: false }
+          : item
+      )
+    );
+  }
+
+  function handleDeleteItem(e) {
+    // delete this item
+    setItems(items.filter((item) => item.id !== e.target.dataset.identify));
+  }
+
+  function handleCopyItem(e) {
+    //generate random id
+    const uuid = crypto.randomUUID();
+    // get text property
+    const copyText = e.target.parentNode.querySelector("p").innerText;
+    console.log(copyText);
+    // add new item
+    setItems([
+      ...items,
+      { id: uuid, text: copyText, completed: false, editing: false },
+    ]);
   }
 
   return (
     <div className="App">
       <h1>Get It Done!</h1>
-      <ToDoList items={items} onClickItem={HandleItemClick} />
+      <ToDoList
+        items={items}
+        onClickItem={handleItemClick}
+        onEditItem={handleEditItem}
+        onCancelEdit={handleCancelEdit}
+        onOverwrite={handleOverwrite}
+        onDeleteItem={handleDeleteItem}
+        onCopyItem={handleCopyItem}
+      />
       <DoneList
         items={items}
-        onClickItem={HandleItemClick}
-        onClearDone={HandleClearDone}
+        onClickItem={handleItemClick}
+        onClearDone={handleClearDone}
       />
       <AddItemForm onAddNewItem={addNewItem} />
     </div>
   );
 }
 
-function ToDoList({ items, onClickItem }) {
+function ToDoList({
+  items,
+  onClickItem,
+  onEditItem,
+  onCancelEdit,
+  onOverwrite,
+  onDeleteItem,
+  onCopyItem,
+}) {
   return (
     <div className="todo-list-container">
       <ul>
@@ -57,17 +128,27 @@ function ToDoList({ items, onClickItem }) {
           .filter((item) => !item.completed)
           .map((item) =>
             item.editing ? (
-              <li>
+              <li key={item.id} id={item.id}>
                 <input type="text" />
-                <button data-identify={item.id}>Overwrite</button>
-                <button data-identify={item.id}>Cancel</button>
+                <button onClick={onOverwrite} data-identify={item.id}>
+                  Overwrite
+                </button>
+                <button onClick={onCancelEdit} data-identify={item.id}>
+                  Cancel
+                </button>
               </li>
             ) : (
-              <li onClick={onClickItem} key={item.id} id={item.id}>
-                {item.text}
-                <button data-identify={item.id}>Edit</button>
-                <button data-identify={item.id}>Copy</button>
-                <button data-identify={item.id}>Delete</button>
+              <li key={item.id} id={item.id}>
+                <p onClick={onClickItem}>{item.text}</p>
+                <button onClick={onEditItem} data-identify={item.id}>
+                  Edit
+                </button>
+                <button onClick={onCopyItem} data-identify={item.id}>
+                  Copy
+                </button>
+                <button onClick={onDeleteItem} data-identify={item.id}>
+                  Delete
+                </button>
               </li>
             )
           )}
@@ -84,8 +165,8 @@ function DoneList({ items, onClickItem, onClearDone }) {
         {items
           .filter((item) => item.completed)
           .map((item) => (
-            <li onClick={onClickItem} key={item.id} id={item.id}>
-              {item.text}
+            <li key={item.id} id={item.id}>
+              <p onClick={onClickItem}>{item.text} </p>
             </li>
           ))}
       </ul>
