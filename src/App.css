@@ -1,8 +1,28 @@
-/* * {
-  margin: 0;
+/* Colors */
+:root {
+  /* PRIMARY */
+  --strong-cyan: hsl(226, 67%, 45%);
+  /* NEUTRAL */
+  --very-dark-cyan: hsl(226, 100%, 15%);
+  --dark-grayish-cyan: hsl(226, 14%, 43%);
+  --grayish-cyan: hsl(226, 14%, 56%);
+  --light-grayish-cyan: hsl(226, 41%, 84%);
+  --very-light-grayish-cyan: hsl(226, 41%, 97%);
+  --white: hsl(0, 0%, 100%);
+  /* OTHER */
+  --error: hsl(0, 56%, 67%);
+}
+
+/* General Styling */
+* {
   padding: 0;
+  margin: 0;
   box-sizing: border-box;
-} */
+}
+
+*:focus {
+  outline: none;
+}
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -10,8 +30,182 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: calc((24 / 16) * 1rem);
+  line-height: 1.3;
+  color: var(--very-dark-cyan);
+  background-color: var(--light-grayish-cyan);
 }
 
-li > p {
-  display: inline-block;
+ul {
+  list-style-type: none;
+}
+
+h1 {
+  text-align: center;
+  padding: calc((40 / 16) * 1rem) 0;
+}
+
+h2 {
+  font-size: calc((32 / 16) * 1rem);
+}
+
+input {
+  max-width: 100%;
+  width: 100%;
+}
+
+input:focus {
+  outline: calc((2 / 16) * 1rem) solid var(--strong-cyan);
+}
+
+button {
+  cursor: pointer;
+  padding: calc((2 / 16) * 1rem) calc((4 / 16) * 1rem);
+  border-radius: none;
+  border: calc((1.5 / 16) * 1rem) solid var(--white);
+  background-color: var(--very-dark-cyan);
+  color: white;
+}
+
+button:hover,
+button:focus {
+  background-color: var(--strong-cyan);
+}
+
+/* App */
+.App {
+  background-color: var(--very-light-grayish-cyan);
+  max-width: calc((1200 / 16) * 1rem);
+  margin: 0 auto;
+}
+
+/* todo container */
+.todo-list-container {
+  padding: calc((5 / 16) * 1rem);
+  padding-top: calc((15 / 16) * 1rem);
+  border: calc((2 / 16) * 1rem) var(--very-dark-cyan) solid;
+  margin-bottom: calc((40 / 16) * 1rem);
+  max-width: calc((720 / 16) * 1rem);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.todo-list-container ul li {
+  border-bottom: calc((2 / 16) * 1rem) var(--light-grayish-cyan) solid;
+  padding-bottom: calc((15 / 16) * 1rem);
+  margin-bottom: calc((10 / 16) * 1rem);
+}
+
+.todo-list-container ul li:last-of-type {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.todo-list-container li input {
+  margin-bottom: calc((5 / 16) * 1rem);
+}
+
+.todo-list-container li p {
+  cursor: pointer;
+  margin-bottom: calc((5 / 16) * 1rem);
+}
+
+.todo-list-container li p:hover,
+.todo-list-container li p:focus {
+  color: var(--strong-cyan);
+}
+
+.todo-list-container li .btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-list-container li .edit-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* add item form */
+.add-item-form {
+  margin-bottom: calc((40 / 16) * 1rem);
+}
+
+.add-item-form h2 {
+  max-width: calc((720 / 16) * 1rem);
+  margin: 0 auto;
+}
+
+.add-item-form input {
+  border: calc((2 / 16) * 1rem) solid var(--very-dark-cyan);
+  max-width: calc((720 / 16) * 1rem);
+  margin: 0 auto;
+  padding: calc((5 / 16) * 1rem);
+
+  display: block;
+}
+
+.add-item-form button {
+  width: 100%;
+  border: none;
+  max-width: calc((720 / 16) * 1rem);
+  margin: 0 auto;
+  padding: calc((10 / 16) * 1rem);
+
+  display: block;
+}
+
+/* done-container */
+.done-list-container {
+  max-width: calc((720 / 16) * 1rem);
+  margin: 0 auto;
+}
+
+.done-list-container li p {
+  color: var(--grayish-cyan);
+  text-decoration: line-through;
+}
+
+.done-list-container li p {
+  cursor: pointer;
+  margin-bottom: calc((5 / 16) * 1rem);
+}
+
+.done-list-container li p:hover,
+.done-list-container li p:focus {
+  color: var(--strong-cyan);
+}
+
+.done-list-container button {
+  width: 100%;
+  border: none;
+  max-width: calc((720 / 16) * 1rem);
+  margin: 0 auto;
+  padding: calc((10 / 16) * 1rem);
+
+  display: block;
+}
+
+/**********************/
+/*     over 480px     */
+/**********************/
+@media only screen and (min-width: 30em) {
+  /* App */
+  .App {
+    background-color: var(--very-light-grayish-cyan);
+    max-width: calc((1200 / 16) * 1rem);
+    margin: calc((40 / 16) * 1rem) auto;
+  }
+
+  /* todo container */
+  .todo-list-container li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .todo-list-container p {
+    margin-right: calc((10 / 16) * 1rem);
+  }
 }

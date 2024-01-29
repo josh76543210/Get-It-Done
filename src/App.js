@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./reset.css";
 import "./App.css";
 
 export default function App() {
@@ -7,6 +8,8 @@ export default function App() {
     { id: "2", text: "Do homework", completed: false, editing: false },
     { id: "3", text: "Bake a cake", completed: true, editing: false },
     { id: "4", text: "Walk the dog", completed: false, editing: false },
+    { id: "5", text: "Go shopping", completed: true, editing: false },
+    { id: "6", text: "Clean room", completed: true, editing: false },
   ];
 
   const [items, setItems] = useState(starterItems);
@@ -61,7 +64,7 @@ export default function App() {
 
   function handleOverwrite(e) {
     // get new text property
-    const newText = e.target.parentNode.querySelector("input").value;
+    const newText = e.target.parentNode.parentNode.querySelector("input").value;
     // update editing and text property of clicked item
     setItems((items) =>
       items.map((item) =>
@@ -81,10 +84,11 @@ export default function App() {
     //generate random id
     const uuid = crypto.randomUUID();
     // get text property
-    const copyText = e.target.parentNode.querySelector("p").innerText;
+    const copyText =
+      e.target.parentNode.parentNode.querySelector("p").innerText;
     // find index of current item
     const curIndex = items.indexOf(
-      ...items.filter((item) => item.id === e.target.parentNode.id)
+      ...items.filter((item) => item.id === e.target.parentNode.parentNode.id)
     );
     // add new item
     setItems([
@@ -106,12 +110,12 @@ export default function App() {
         onDeleteItem={handleDeleteItem}
         onCopyItem={handleCopyItem}
       />
+      <AddItemForm onAddNewItem={addNewItem} />
       <DoneList
         items={items}
         onClickItem={handleItemClick}
         onClearDone={handleClearDone}
       />
-      <AddItemForm onAddNewItem={addNewItem} />
     </div>
   );
 }
@@ -134,25 +138,31 @@ function ToDoList({
             item.editing ? (
               <li key={item.id} id={item.id}>
                 <input type="text" defaultValue={item.text} autoFocus />
-                <button onClick={onOverwrite} data-identify={item.id}>
-                  Overwrite
-                </button>
-                <button onClick={onCancelEdit} data-identify={item.id}>
-                  Cancel
-                </button>
+                <div className="edit-btns">
+                  <button onClick={onOverwrite} data-identify={item.id}>
+                    Overwrite
+                  </button>
+                  <button onClick={onCancelEdit} data-identify={item.id}>
+                    Cancel
+                  </button>
+                </div>
               </li>
             ) : (
               <li key={item.id} id={item.id}>
-                <p onClick={onClickItem}>{item.text}</p>
-                <button onClick={onEditItem} data-identify={item.id}>
-                  Edit
-                </button>
-                <button onClick={onCopyItem} data-identify={item.id}>
-                  Copy
-                </button>
-                <button onClick={onDeleteItem} data-identify={item.id}>
-                  Delete
-                </button>
+                <p onClick={onClickItem} tabIndex="0">
+                  {item.text}
+                </p>
+                <div className="btns">
+                  <button onClick={onEditItem} data-identify={item.id}>
+                    Edit
+                  </button>
+                  <button onClick={onCopyItem} data-identify={item.id}>
+                    Copy
+                  </button>
+                  <button onClick={onDeleteItem} data-identify={item.id}>
+                    Delete
+                  </button>
+                </div>
               </li>
             )
           )}
@@ -164,13 +174,15 @@ function ToDoList({
 function DoneList({ items, onClickItem, onClearDone }) {
   return (
     <div className="done-list-container">
-      <h2>Already done</h2>
+      <h2>Already done:</h2>
       <ul>
         {items
           .filter((item) => item.completed)
           .map((item) => (
             <li key={item.id} id={item.id}>
-              <p onClick={onClickItem}>{item.text} </p>
+              <p onClick={onClickItem} tabIndex="0">
+                {item.text}{" "}
+              </p>
             </li>
           ))}
       </ul>
@@ -188,7 +200,8 @@ function AddItemForm({ onAddNewItem }) {
   }
 
   return (
-    <form action="#" onSubmit={handleFormSubmit}>
+    <form action="#" onSubmit={handleFormSubmit} className="add-item-form">
+      <h2>New item:</h2>
       <input type="text" name="todo-input" id="todo-input" />
       <button type="submit">Add item</button>
     </form>
