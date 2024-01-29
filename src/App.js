@@ -129,7 +129,7 @@ function ToDoList({
           .map((item) =>
             item.editing ? (
               <li key={item.id} id={item.id}>
-                <input type="text" />
+                <input type="text" defaultValue={item.text} autoFocus />
                 <button onClick={onOverwrite} data-identify={item.id}>
                   Overwrite
                 </button>
