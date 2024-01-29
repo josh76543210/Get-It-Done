@@ -129,7 +129,11 @@ function ToDoList({
   onDeleteItem,
   onCopyItem,
 }) {
-  return (
+  return items.filter((item) => !item.completed).length === 0 ? (
+    <p className="no-items-message">
+      No items currently on your list. Add an item using the form below.
+    </p>
+  ) : (
     <div className="todo-list-container">
       <ul>
         {items
@@ -186,7 +190,14 @@ function DoneList({ items, onClickItem, onClearDone }) {
             </li>
           ))}
       </ul>
-      <button onClick={onClearDone}>Clear already done</button>
+      {items.filter((item) => item.completed).length === 0 ? (
+        <p>
+          You currently have no finished items. Check off items on the above
+          list by clicking on them and they will be added to this list.
+        </p>
+      ) : (
+        <button onClick={onClearDone}>Clear already done</button>
+      )}
     </div>
   );
 }

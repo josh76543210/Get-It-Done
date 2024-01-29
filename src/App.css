@@ -77,6 +77,7 @@ button:focus {
   background-color: var(--very-light-grayish-cyan);
   max-width: calc((1200 / 16) * 1rem);
   margin: 0 auto;
+  padding-bottom: calc((40 / 16) * 1rem);
 }
 
 /* todo container */
@@ -125,6 +126,13 @@ button:focus {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.no-items-message {
+  margin-bottom: calc((40 / 16) * 1rem);
+  max-width: calc((720 / 16) * 1rem);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* add item form */
