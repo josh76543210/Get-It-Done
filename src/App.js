@@ -82,11 +82,15 @@ export default function App() {
     const uuid = crypto.randomUUID();
     // get text property
     const copyText = e.target.parentNode.querySelector("p").innerText;
-    console.log(copyText);
+    // find index of current item
+    const curIndex = items.indexOf(
+      ...items.filter((item) => item.id === e.target.parentNode.id)
+    );
     // add new item
     setItems([
-      ...items,
+      ...items.slice(0, curIndex + 1),
       { id: uuid, text: copyText, completed: false, editing: false },
+      ...items.slice(curIndex + 1),
     ]);
   }
 
