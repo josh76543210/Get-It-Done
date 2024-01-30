@@ -1,6 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./reset.css";
 import "./App.css";
+
+// use local storage
+function useStickyState(defaultValue, key) {
+  const [value, setValue] = useState(() => {
+    const stickyValue = window.localStorage.getItem(key);
+    return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue;
+  });
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+  return [value, setValue];
+}
 
 export default function App() {
   const starterItems = [
@@ -12,7 +24,8 @@ export default function App() {
     { id: "6", text: "Clean room", completed: true, editing: false },
   ];
 
-  const [items, setItems] = useState(starterItems);
+  // const [items, setItems] = useState(starterItems);
+  const [items, setItems] = useStickyState(starterItems, "items");
 
   function addNewItem(itemText) {
     //generate random id
