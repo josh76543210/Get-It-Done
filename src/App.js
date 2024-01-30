@@ -77,7 +77,15 @@ export default function App() {
 
   function handleOverwrite(e) {
     // get new text property
-    const newText = e.target.parentNode.parentNode.querySelector("input").value;
+    const newText = e.target.parentNode.parentNode
+      .querySelector("input")
+      .value.trim();
+
+    // chekck if it is empty
+    if (newText === "") {
+      alert("Input cannot be empty");
+      return;
+    }
     // update editing and text property of clicked item
     setItems((items) =>
       items.map((item) =>
@@ -219,8 +227,15 @@ function AddItemForm({ onAddNewItem }) {
   function handleFormSubmit(e) {
     e.preventDefault();
     const todoInput = document.querySelector("#todo-input");
-    onAddNewItem(todoInput.value);
+    const newText = todoInput.value.trim();
     todoInput.value = "";
+
+    if (newText === "") {
+      alert("Input cannot be empty");
+      return;
+    }
+
+    onAddNewItem(newText);
   }
 
   return (
